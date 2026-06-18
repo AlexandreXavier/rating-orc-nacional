@@ -26,9 +26,9 @@ Podiums name boats only by **nome** (Portuguese, with sponsor suffixes); ORC dat
 - **emits** `src/generated/provas.json` (the only data the app reads at runtime) and `src/generated/boats.json` (VPP/polar data keyed by sailnumber).
 
 Consequences for working here:
-- `src/generated/` is gitignored — always run the generate step before `dev`/`build` (the npm scripts do this for you).
-- **After editing `provas.js` or `overrides.js`, re-run `npm run build:provas`** (or restart `dev`) or the app won't reflect the change.
-- `LIXO/` is gitignored and named "trash" but it is **a required build input** (the ORC dataset). Do not delete it.
+- The generated artifacts (`src/generated/*.json`) **are committed** — they're the deployable data and the fallback for environments without the ORC source. `build:provas` regenerates them when `LIXO/` is present and **skips regeneration (exit 0) when it's absent** (e.g. Vercel), letting `vite build` consume the committed copies.
+- **After editing `provas.js` or `overrides.js`, re-run `npm run build:provas`** (or restart `dev`) and **commit the regenerated `src/generated/*.json`**, or the deploy won't reflect the change.
+- `LIXO/` is gitignored and named "trash" but it is the **ORC source dataset** the regeneration reads. Keep it locally; it is not needed to deploy (the committed artifacts cover that).
 
 ### App shell
 

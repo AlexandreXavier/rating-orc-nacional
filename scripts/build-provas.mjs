@@ -7,7 +7,7 @@
 // acentos, sufixo de patrocinador removido); aceita qualquer país emissor; em
 // empate prefere POR; restantes empates → "sem match" (pendente de curadoria).
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { provas, ALIAS } from '../src/data/provas.js';
@@ -42,6 +42,15 @@ let index;
 try {
   index = JSON.parse(readFileSync(INDEX_PATH, 'utf8'));
 } catch (e) {
+  // A fonte ORC (LIXO/) é só local e não versionada (ADR 0001). Em ambientes sem
+  // ela (e.g. Vercel), se já há um provas.json gerado e commitado, saltamos a
+  // regeneração e deixamos o `vite build` consumir os artefactos versionados.
+  if (existsSync(OUT_PATH) && existsSync(OUT_BOATS_PATH)) {
+    console.warn(
+      `⚠ Índice ORC ausente em ${INDEX_PATH}\n  A usar os artefactos versionados (src/generated/*.json); salto a regeneração.`,
+    );
+    process.exit(0);
+  }
   console.error(`\n✗ Não consegui ler o índice ORC em ${INDEX_PATH}\n  ${e.message}`);
   process.exit(1);
 }
