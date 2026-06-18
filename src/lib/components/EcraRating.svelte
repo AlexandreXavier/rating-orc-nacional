@@ -1,5 +1,7 @@
 <script>
   import PolarPlot from './PolarPlot.svelte';
+  import PolarPlot3D from './PolarPlot3D.svelte';
+  import PolarModeToggle from './PolarModeToggle.svelte';
   import boatsData from '../../generated/boats.json';
 
   const REGION_NAMES = { centro: 'Centro', norte: 'Norte', madeira: 'Madeira', sul: 'Sul', nacional: 'Nacional' };
@@ -43,6 +45,7 @@
 
   // Veleiro em foco para o Quadro polar: hover na linha, com fallback para o 1.º.
   let hoverSn;
+  let polarMode = '2d'; // '2d' | '3d' (toggle do Quadro polar)
   $: defaultSn = boats[0]?.sailnumber;
   $: activeSn = hoverSn && boats.some((b) => b.sailnumber === hoverSn) ? hoverSn : defaultSn;
   $: focused = activeSn ? boatsData[activeSn] : null;
@@ -106,7 +109,12 @@
       <div class="rt-polar">
         {#if focused}
           <h4>{focused.name}<span class="ty">{focused.type}</span></h4>
-          <PolarPlot boats={[focused]} />
+          <PolarModeToggle bind:mode={polarMode} />
+          {#if polarMode === '3d'}
+            <PolarPlot3D boats={[focused]} />
+          {:else}
+            <PolarPlot boats={[focused]} />
+          {/if}
         {/if}
       </div>
     </div>
