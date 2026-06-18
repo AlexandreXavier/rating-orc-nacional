@@ -43,6 +43,7 @@
 
 <header class="hero">
   <div class="wrap">
+    <span class="logo" aria-hidden="true"></span>
     <div class="kicker"><span class="rule"></span>Vela de Cruzeiro · Época 2026</div>
     <h1>Rating ORC Nacional</h1>
     <p class="subhead">Pódios <span class="ac">× ratings</span> — Portugal</p>
