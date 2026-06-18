@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Build output
+dist/
+build/
+.svelte-kit/
+
+# Reference material (kept local, not versioned)
+LIXO/
+
+# OS
+.DS_Store
+*.local
