@@ -18,6 +18,7 @@ const ROOT = resolve(__dirname, '..');
 const INDEX_PATH = resolve(ROOT, 'LIXO/orc-data/site/index.json');
 const DATA_DIR = resolve(ROOT, 'LIXO/orc-data/site/data');
 const OUT_PATH = resolve(ROOT, 'src/generated/provas.json');
+const OUT_BOATS_PATH = resolve(ROOT, 'src/generated/boats.json');
 
 // remove os diacríticos (combining marks U+0300–U+036F) após decompor em NFKD
 const stripAccents = (s) => (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '');
@@ -56,11 +57,13 @@ for (const [sailnumber, name] of index) {
 // Características do certificado para o Quadro de características (fatia #3):
 // velocidade máxima (kn, do VPP), comprimento (m), deslocamento (kg), calado (m), GPH.
 const charsCache = new Map();
+const boatsOut = {}; // sailnumber → { name, type, vpp } — consumido pelo Quadro polar (fatia #6)
 function boatChars(sailnumber) {
   if (charsCache.has(sailnumber)) return charsCache.get(sailnumber);
   let chars = null;
   try {
     const d = JSON.parse(readFileSync(resolve(DATA_DIR, sailnumber + '.json'), 'utf8'));
+    boatsOut[sailnumber] = { name: d.name, type: d.boat?.type ?? '', vpp: d.vpp };
     const v = d.vpp || {};
     const twa = Object.keys(v).filter((k) => /^\d+$/.test(k)); // chaves de ângulo (TWA)
     const velmax = twa.length ? Math.max(...twa.map((t) => Math.max(...v[t]))) : null;
@@ -129,10 +132,12 @@ const out = {
 
 mkdirSync(dirname(OUT_PATH), { recursive: true });
 writeFileSync(OUT_PATH, JSON.stringify(out, null, 2) + '\n');
+writeFileSync(OUT_BOATS_PATH, JSON.stringify(boatsOut) + '\n');
 
 console.log(
   `provas.json: ${outProvas.length} provas · ${comRating.size} veleiros com rating encontrado (de ${visados.size} visados distintos)`,
 );
+console.log(`boats.json: ${Object.keys(boatsOut).length} veleiros com VPP`);
 const swing = outProvas
   .flatMap((p) => p.classes)
   .flatMap((c) => c.rows)
