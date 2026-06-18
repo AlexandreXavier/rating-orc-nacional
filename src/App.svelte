@@ -4,6 +4,7 @@
   import Entrada from './lib/components/Entrada.svelte';
   import EcraRating from './lib/components/EcraRating.svelte';
   import ThemeToggle from './lib/components/ThemeToggle.svelte';
+  import HelpModal from './lib/components/HelpModal.svelte';
 
   function parse(hash) {
     const h = (hash || '').replace(/^#/, '');
@@ -23,6 +24,7 @@
 </script>
 
 <ThemeToggle />
+<HelpModal />
 
 {#if prova}
   <EcraRating {prova} />
