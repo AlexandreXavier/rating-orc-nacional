@@ -38,7 +38,7 @@
               {#each c.rows as r}
                 <tr class:hit={isHit(r.name)}>
                   <td class="pos"><div class="medal {medalClass(r.pos)}">{r.pos}</div></td>
-                  <td class="boat">{r.name}{#if r.skipper}<span class="skip">{r.skipper}</span>{/if}</td>
+                  <td class="boat">{r.name}{#if r.matched}<span class="rating-dot" title="Tem certificado ORC (rating encontrado)"></span>{/if}{#if r.skipper}<span class="skip">{r.skipper}</span>{/if}</td>
                   <td class="club">{#if r.club}<span class="club-chip">{r.club}</span>{/if}</td>
                 </tr>
               {/each}

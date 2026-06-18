@@ -336,6 +336,20 @@ a.card:focus-visible {
   border-color: var(--accent);
   outline: none;
 }
+
+/* indicador "tem rating ORC" no cartão da prova (fatia #8) */
+.rating-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.lede .rating-dot {
+  margin: 0 1px;
+}
 .card .stripe {
   height: 4px;
   background: var(--c, var(--accent));

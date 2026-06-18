@@ -46,7 +46,8 @@
     <h1>Rating ORC Nacional</h1>
     <p class="subhead">Pódios <span class="ac">× ratings</span> — Portugal</p>
     <p class="lede">
-      Seleciona uma prova para ver, dos barcos medalhados, os que têm certificado ORC e as suas características.
+      Seleciona uma prova para ver, dos barcos medalhados, os que têm certificado ORC
+      (<span class="rating-dot"></span>) e as suas características.
     </p>
     <div class="statline">
       <span class="tag"><b>{stats.provas ?? ordered.length}</b>&nbsp;provas</span>
