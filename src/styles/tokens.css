@@ -95,6 +95,16 @@ a {
   position: relative;
   padding: 48px 0 28px;
 }
+/* Marca da app: silhueta de veleiro (public/icon.svg) recolorida pelo tema via mask */
+.logo {
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+  background-color: var(--accent);
+  -webkit-mask: url(/icon.svg) center / contain no-repeat;
+  mask: url(/icon.svg) center / contain no-repeat;
+}
 .kicker {
   display: inline-flex;
   align-items: center;
