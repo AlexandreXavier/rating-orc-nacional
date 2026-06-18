@@ -1,6 +1,7 @@
 <script>
   import ProvaCard from './ProvaCard.svelte';
   import PodiosChart from './PodiosChart.svelte';
+  import HelpButton from './HelpButton.svelte';
 
   export let provas = [];
   export let stats = {};
@@ -60,6 +61,7 @@
 <section class="chart wrap">
   <div class="sec-head">
     <h2>Barcos com mais pódios</h2>
+    <HelpButton topic="podios" label="o gráfico de pódios" />
     <span class="sub">época 2026 · todas as regiões e classes</span>
   </div>
   <div class="accent-rule"></div>
@@ -86,6 +88,7 @@
         <option value="all">Todas as classes</option>
         {#each CLASSES as c}<option value={c}>{c}</option>{/each}
       </select>
+      <HelpButton topic="filtros" label="os filtros" />
     </div>
     <div class="count">
       {#if query}

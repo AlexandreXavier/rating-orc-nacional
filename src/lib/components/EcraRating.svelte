@@ -3,6 +3,7 @@
   import PolarPlot3D from './PolarPlot3D.svelte';
   import PolarModeToggle from './PolarModeToggle.svelte';
   import boatsData from '../../generated/boats.json';
+  import HelpButton from './HelpButton.svelte';
 
   const REGION_NAMES = { centro: 'Centro', norte: 'Norte', madeira: 'Madeira', sul: 'Sul', nacional: 'Nacional' };
 
@@ -75,6 +76,7 @@
     <p class="lead">
       <b>{boats.length}</b> veleiro(s) com rating encontrado
       <span class="hint">· ▲ maior · ▼ menor por coluna · passa o rato numa linha para ver o polar</span>
+      <HelpButton topic="caracteristicas" label="o quadro de características" />
     </p>
 
     <div class="rating-grid">
@@ -109,7 +111,10 @@
       <div class="rt-polar">
         {#if focused}
           <h4>{focused.name}<span class="ty">{focused.type}</span></h4>
-          <PolarModeToggle bind:mode={polarMode} />
+          <div class="polar-head">
+            <PolarModeToggle bind:mode={polarMode} />
+            <HelpButton topic="polar" label="o quadro polar" />
+          </div>
           {#if polarMode === '3d'}
             <PolarPlot3D boats={[focused]} mode="lines" />
           {:else}
@@ -122,3 +127,12 @@
     <p class="lead">Nenhum veleiro desta prova tem rating encontrado no dataset ORC.</p>
   {/if}
 </div>
+
+<style>
+  .polar-head {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+</style>
