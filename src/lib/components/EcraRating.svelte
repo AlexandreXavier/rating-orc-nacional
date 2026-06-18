@@ -111,7 +111,7 @@
           <h4>{focused.name}<span class="ty">{focused.type}</span></h4>
           <PolarModeToggle bind:mode={polarMode} />
           {#if polarMode === '3d'}
-            <PolarPlot3D boats={[focused]} />
+            <PolarPlot3D boats={[focused]} mode="lines" />
           {:else}
             <PolarPlot boats={[focused]} />
           {/if}
