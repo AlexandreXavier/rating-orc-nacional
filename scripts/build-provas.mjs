@@ -10,7 +10,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { provas } from '../src/data/provas.js';
+import { provas, ALIAS } from '../src/data/provas.js';
 import { overrides } from '../src/data/overrides.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -123,11 +123,28 @@ for (const p of outProvas)
       if (r.matched) comRating.add(r.sailnumber);
     }
 
+// Pódios por barco (ALIAS agrega nomes de patrocinador ao mesmo barco) — gráfico (fatia #5)
+const aliasName = (n) => ALIAS[n] || n;
+const tally = {};
+for (const p of provas)
+  for (const c of p.classes || [])
+    c.rows.forEach((r, i) => {
+      if (i >= 3) return;
+      const k = aliasName(r[0]);
+      tally[k] ||= { name: k, 1: 0, 2: 0, 3: 0, total: 0 };
+      tally[k][i + 1]++;
+      tally[k].total++;
+    });
+const podios = Object.values(tally)
+  .filter((d) => d.total >= 2)
+  .sort((a, b) => b.total - a.total || b[1] - a[1] || a.name.localeCompare(b.name));
+
 const out = {
   generatedAt: new Date().toISOString(),
   source: 'LIXO/orc-data/site/index.json',
   stats: { provas: outProvas.length, visadosDistintos: visados.size, comRating: comRating.size },
   provas: outProvas,
+  podios,
 };
 
 mkdirSync(dirname(OUT_PATH), { recursive: true });
@@ -138,6 +155,7 @@ console.log(
   `provas.json: ${outProvas.length} provas · ${comRating.size} veleiros com rating encontrado (de ${visados.size} visados distintos)`,
 );
 console.log(`boats.json: ${Object.keys(boatsOut).length} veleiros com VPP`);
+console.log(`podios: ${podios.length} barcos com ≥2 pódios`);
 const swing = outProvas
   .flatMap((p) => p.classes)
   .flatMap((c) => c.rows)

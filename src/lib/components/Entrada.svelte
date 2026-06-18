@@ -1,8 +1,10 @@
 <script>
   import ProvaCard from './ProvaCard.svelte';
+  import PodiosChart from './PodiosChart.svelte';
 
   export let provas = [];
   export let stats = {};
+  export let podios = [];
 
   const REGION_NAMES = { centro: 'Centro', norte: 'Norte', madeira: 'Madeira', sul: 'Sul', nacional: 'Nacional' };
   const ORDER = { nacional: 0, centro: 1, norte: 2, madeira: 3, sul: 4 };
@@ -53,6 +55,15 @@
     </div>
   </div>
 </header>
+
+<section class="chart wrap">
+  <div class="sec-head">
+    <h2>Barcos com mais pódios</h2>
+    <span class="sub">época 2026 · todas as regiões e classes</span>
+  </div>
+  <div class="accent-rule"></div>
+  <PodiosChart {podios} />
+</section>
 
 <div class="controls">
   <div class="wrap">
