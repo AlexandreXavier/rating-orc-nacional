@@ -2,12 +2,15 @@
   const REGION_NAMES = { centro: 'Centro', norte: 'Norte', madeira: 'Madeira', sul: 'Sul', nacional: 'Nacional' };
 
   export let prova;
+  export let query = '';
+  export let dim = false;
 
   const medalClass = (pos) => (pos <= 3 ? `p${pos}` : 'px');
+  const isHit = (name) => query && name.toLowerCase().includes(query);
 </script>
 
 {#if prova.pending}
-  <article class="card pending" data-region={prova.region}>
+  <article class="card pending" class:dim data-region={prova.region}>
     <div class="stripe"></div>
     <div class="body">
       <div class="rgn"><span class="fdot"></span>{REGION_NAMES[prova.region] ?? prova.region}</div>
@@ -20,7 +23,7 @@
     </div>
   </article>
 {:else}
-  <a class="card" href="#prova/{prova.id}" data-region={prova.region}>
+  <a class="card" class:dim href="#prova/{prova.id}" data-region={prova.region}>
     <div class="stripe"></div>
     <div class="body">
       <div class="rgn"><span class="fdot"></span>{REGION_NAMES[prova.region] ?? prova.region}</div>
@@ -33,7 +36,7 @@
           <table class="res">
             <tbody>
               {#each c.rows as r}
-                <tr>
+                <tr class:hit={isHit(r.name)}>
                   <td class="pos"><div class="medal {medalClass(r.pos)}">{r.pos}</div></td>
                   <td class="boat">{r.name}{#if r.skipper}<span class="skip">{r.skipper}</span>{/if}</td>
                   <td class="club">{#if r.club}<span class="club-chip">{r.club}</span>{/if}</td>

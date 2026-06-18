@@ -156,6 +156,129 @@ a {
   font-weight: 700;
 }
 
+/* ===== Controls (filtros da entrada) ===== */
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  margin: 28px 0 4px;
+  padding: 14px 0;
+  background: linear-gradient(180deg, rgb(var(--fill-rgb)) 72%, transparent);
+  backdrop-filter: blur(5px);
+}
+.controls-inner {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search {
+  flex: 1 1 280px;
+  position: relative;
+  min-width: 240px;
+}
+.search input {
+  width: 100%;
+  padding: 13px 16px 13px 42px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
+}
+.search svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-2);
+}
+.chips {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 9px 14px;
+  border-radius: var(--r);
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.chip:hover {
+  color: var(--ink);
+  border-color: var(--muted-2);
+}
+.chip .fdot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c, var(--accent));
+}
+.chip[data-region="centro"] { --c: var(--centro); }
+.chip[data-region="norte"] { --c: var(--norte); }
+.chip[data-region="madeira"] { --c: var(--madeira); }
+.chip[data-region="sul"] { --c: var(--sul); }
+.chip[data-region="nacional"] { --c: var(--nacional); }
+.chip[data-region="all"] { --c: var(--accent); }
+.chip.active {
+  color: rgb(var(--fill-rgb));
+  background: var(--c);
+  border-color: var(--c);
+}
+.chip.active .fdot {
+  background: rgb(var(--fill-rgb));
+}
+.classsel {
+  padding: 11px 14px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+.count {
+  font-family: var(--font-mono);
+  color: var(--muted-2);
+  font-size: 12.5px;
+  margin: 8px 2px 0;
+  min-height: 18px;
+}
+.count b {
+  color: var(--accent);
+}
+
+/* pesquisa: esbater quem não bate, realçar a linha que bate */
+.card.dim {
+  opacity: 0.26;
+  filter: saturate(0.5);
+}
+table.res tr.hit td.boat {
+  color: var(--accent);
+}
+table.res tr.hit .medal.px {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* ===== Grid + cards ===== */
 .grid {
   display: grid;
