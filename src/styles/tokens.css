@@ -156,6 +156,37 @@ a {
   font-weight: 700;
 }
 
+/* ===== Secção + cabeçalho do gráfico de pódios ===== */
+.chart {
+  margin: 40px auto 8px;
+}
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sec-head h2 {
+  font-family: var(--font-alt);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  margin: 0;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+.sec-head .sub {
+  font-family: var(--font-mono);
+  color: var(--muted-2);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+.accent-rule {
+  height: 2px;
+  width: 64px;
+  background: var(--accent);
+  margin: 10px 0 0;
+}
+
 /* ===== Controls (filtros da entrada) ===== */
 .controls {
   position: sticky;
