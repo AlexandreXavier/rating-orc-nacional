@@ -3,6 +3,7 @@
   import data from './generated/provas.json';
   import Entrada from './lib/components/Entrada.svelte';
   import EcraRating from './lib/components/EcraRating.svelte';
+  import ThemeToggle from './lib/components/ThemeToggle.svelte';
 
   function parse(hash) {
     const h = (hash || '').replace(/^#/, '');
@@ -20,6 +21,8 @@
 
   $: prova = route.name === 'rating' ? data.provas.find((p) => p.id === route.id) : null;
 </script>
+
+<ThemeToggle />
 
 {#if prova}
   <EcraRating {prova} />
