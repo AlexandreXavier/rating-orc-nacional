@@ -24,5 +24,5 @@
 {#if prova}
   <EcraRating {prova} />
 {:else}
-  <Entrada provas={data.provas} stats={data.stats} />
+  <Entrada provas={data.provas} stats={data.stats} podios={data.podios} />
 {/if}
