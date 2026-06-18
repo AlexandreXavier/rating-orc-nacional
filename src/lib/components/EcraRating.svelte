@@ -1,4 +1,7 @@
 <script>
+  import PolarPlot from './PolarPlot.svelte';
+  import boatsData from '../../generated/boats.json';
+
   const REGION_NAMES = { centro: 'Centro', norte: 'Norte', madeira: 'Madeira', sul: 'Sul', nacional: 'Nacional' };
 
   export let prova;
@@ -12,7 +15,7 @@
   ];
 
   // Veleiros da prova com Rating encontrado, deduplicados por número de vela
-  // (todas as classes juntas; se o barco medalhou em vários blocos, classes combinadas).
+  // (todas as classes juntas; se medalhou em vários blocos, classes combinadas).
   $: boats = (() => {
     const m = new Map();
     for (const c of prova.classes)
@@ -38,6 +41,12 @@
     return ex;
   })();
 
+  // Veleiro em foco para o Quadro polar: hover na linha, com fallback para o 1.º.
+  let hoverSn;
+  $: defaultSn = boats[0]?.sailnumber;
+  $: activeSn = hoverSn && boats.some((b) => b.sailnumber === hoverSn) ? hoverSn : defaultSn;
+  $: focused = activeSn ? boatsData[activeSn] : null;
+
   const fmt = (v, dp) =>
     v == null ? '—' : v.toLocaleString('pt-PT', { minimumFractionDigits: dp, maximumFractionDigits: dp });
 
@@ -62,38 +71,46 @@
   {#if boats.length}
     <p class="lead">
       <b>{boats.length}</b> veleiro(s) com rating encontrado
-      <span class="hint">· ▲ maior · ▼ menor por coluna</span>
+      <span class="hint">· ▲ maior · ▼ menor por coluna · passa o rato numa linha para ver o polar</span>
     </p>
-    <div class="chars-wrap">
-      <table class="chars">
-        <thead>
-          <tr>
-            <th class="b">Veleiro</th>
-            <th class="c">Classe</th>
-            {#each COLS as col}
-              <th class="n">{col.label}{#if col.unit}<span class="u"> ({col.unit})</span>{/if}</th>
-            {/each}
-          </tr>
-        </thead>
-        <tbody>
-          {#each boats as b (b.sailnumber)}
+
+    <div class="rating-grid">
+      <div class="chars-wrap">
+        <table class="chars">
+          <thead>
             <tr>
-              <td class="b"><strong>{b.name}</strong><span class="sn">{b.sailnumber}</span></td>
-              <td class="c">{#each b.classes as k}<span class="cls">{k}</span>{/each}</td>
+              <th class="b">Veleiro</th>
+              <th class="c">Classe</th>
               {#each COLS as col}
-                {@const m = mark(col.key, b.chars?.[col.key])}
-                <td class="n {m}">
-                  {fmt(b.chars?.[col.key], col.dp)}{#if m === 'max'}<span class="arr">▲</span>{:else if m === 'min'}<span class="arr">▼</span>{/if}
-                </td>
+                <th class="n">{col.label}{#if col.unit}<span class="u"> ({col.unit})</span>{/if}</th>
               {/each}
             </tr>
-          {/each}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {#each boats as b (b.sailnumber)}
+              <tr class:focused={b.sailnumber === activeSn} on:mouseenter={() => (hoverSn = b.sailnumber)}>
+                <td class="b"><strong>{b.name}</strong><span class="sn">{b.sailnumber}</span></td>
+                <td class="c">{#each b.classes as k}<span class="cls">{k}</span>{/each}</td>
+                {#each COLS as col}
+                  {@const m = mark(col.key, b.chars?.[col.key])}
+                  <td class="n {m}">
+                    {fmt(b.chars?.[col.key], col.dp)}{#if m === 'max'}<span class="arr">▲</span>{:else if m === 'min'}<span class="arr">▼</span>{/if}
+                  </td>
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rt-polar">
+        {#if focused}
+          <h4>{focused.name}<span class="ty">{focused.type}</span></h4>
+          <PolarPlot boats={[focused]} />
+        {/if}
+      </div>
     </div>
   {:else}
     <p class="lead">Nenhum veleiro desta prova tem rating encontrado no dataset ORC.</p>
   {/if}
-
-  <p class="todo">Quadro polar (barco em foco) chega nas fatias #6 / #7.</p>
 </div>

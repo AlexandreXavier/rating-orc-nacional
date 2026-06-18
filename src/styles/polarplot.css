@@ -1,0 +1,62 @@
+/* Diagrama polar — portado de LIXO/orc-data/site/polarplot.css.
+   As cores das linhas (.tws-*) codificam a velocidade do vento (TWS) e mantêm-se;
+   só o fundo/eixos/texto foram adaptados à paleta xani (tema escuro). */
+
+svg .axis text {
+  font: 10px var(--font-mono, monospace);
+  fill: var(--muted-2);
+}
+
+.axis line,
+.axis circle {
+  fill: none;
+  stroke: rgba(var(--fg-rgb), 0.18);
+  stroke-dasharray: 1, 4;
+}
+
+.axis.sog-10 circle {
+  stroke: rgba(var(--fg-rgb), 0.45) !important;
+  stroke-dasharray: none !important;
+}
+
+.axis.sog-12 circle,
+.axis.sog-14 circle,
+.axis.sog-16 circle {
+  stroke: rgba(var(--fg-rgb), 0.12);
+}
+
+.line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2px;
+  transition: 300ms;
+}
+
+.highlight {
+  stroke: var(--ink);
+  fill: var(--bg);
+}
+
+.vmg-run,
+.vmg-beat {
+  fill: var(--bg);
+  transition: 300ms;
+}
+
+.series-1 {
+  stroke-dasharray: 3, 3;
+}
+.series-2 {
+  stroke-dasharray: 3, 6;
+}
+
+/* Palette TWS (igual ao orc-data) */
+.tws-4 { stroke: #8c564b; }
+.tws-6 { stroke: #1f77b4; }
+.tws-8 { stroke: #ff7f0e; }
+.tws-10 { stroke: #2ca02c; }
+.tws-12 { stroke: #d62728; }
+.tws-14 { stroke: #9467bd; }
+.tws-16 { stroke: #17becf; }
+.tws-20 { stroke: #e377c2; }
+.tws-24 { stroke: #aaa; }

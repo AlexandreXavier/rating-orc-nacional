@@ -555,6 +555,53 @@ table.chars td.n.min .arr {
 table.chars tbody tr:hover {
   background: rgba(var(--fg-rgb), 0.04);
 }
+table.chars tbody tr.focused {
+  background: rgba(var(--accent-rgb), 0.1);
+}
+table.chars tbody tr.focused td.b strong {
+  color: var(--accent);
+}
+
+/* tabela (esq.) + polar (dir.) no ecrã de rating */
+.rating-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: start;
+  margin-top: 14px;
+}
+.rating-grid .chars-wrap {
+  margin-top: 0;
+}
+.rt-polar {
+  position: sticky;
+  top: 16px;
+}
+.rt-polar h4 {
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.05rem;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.rt-polar h4 .ty {
+  display: block;
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-2);
+  margin-top: 1px;
+}
+@media (max-width: 900px) {
+  .rating-grid {
+    grid-template-columns: 1fr;
+  }
+  .rt-polar {
+    position: static;
+    max-width: 380px;
+  }
+}
 
 @media (max-width: 760px) {
   .grid {
