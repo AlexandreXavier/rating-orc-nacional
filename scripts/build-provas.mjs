@@ -16,6 +16,7 @@ import { overrides } from '../src/data/overrides.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const INDEX_PATH = resolve(ROOT, 'LIXO/orc-data/site/index.json');
+const DATA_DIR = resolve(ROOT, 'LIXO/orc-data/site/data');
 const OUT_PATH = resolve(ROOT, 'src/generated/provas.json');
 
 // remove os diacríticos (combining marks U+0300–U+036F) após decompor em NFKD
@@ -52,6 +53,32 @@ for (const [sailnumber, name] of index) {
   byName.get(k).push({ sailnumber, name, country: sailnumber.split('/')[0] });
 }
 
+// Características do certificado para o Quadro de características (fatia #3):
+// velocidade máxima (kn, do VPP), comprimento (m), deslocamento (kg), calado (m), GPH.
+const charsCache = new Map();
+function boatChars(sailnumber) {
+  if (charsCache.has(sailnumber)) return charsCache.get(sailnumber);
+  let chars = null;
+  try {
+    const d = JSON.parse(readFileSync(resolve(DATA_DIR, sailnumber + '.json'), 'utf8'));
+    const v = d.vpp || {};
+    const twa = Object.keys(v).filter((k) => /^\d+$/.test(k)); // chaves de ângulo (TWA)
+    const velmax = twa.length ? Math.max(...twa.map((t) => Math.max(...v[t]))) : null;
+    const s = d.boat?.sizes || {};
+    chars = {
+      velmax: velmax != null ? +velmax.toFixed(2) : null,
+      loa: s.loa ?? null,
+      dspl: s.displacement ?? null,
+      draft: s.draft ?? null,
+      gph: d.rating?.gph ?? null,
+    };
+  } catch (e) {
+    console.warn(`  ⚠ sem dados por-barco para ${sailnumber} (${e.code || e.message})`);
+  }
+  charsCache.set(sailnumber, chars);
+  return chars;
+}
+
 function resolveBoat(boatName) {
   if (Object.prototype.hasOwnProperty.call(overrides, boatName)) {
     const o = overrides[boatName];
@@ -77,7 +104,8 @@ const outProvas = provas.map((p) => {
     rows: c.rows.map((r, i) => {
       const [name, skipper = '', club = ''] = r;
       const res = resolveBoat(name);
-      return { pos: i + 1, name, skipper, club, sailnumber: res.sailnumber, matched: res.matched, via: res.via };
+      const chars = res.matched ? boatChars(res.sailnumber) : null;
+      return { pos: i + 1, name, skipper, club, sailnumber: res.sailnumber, matched: res.matched, via: res.via, chars };
     }),
   }));
   return { id, region: p.region, prova: p.prova, date: p.date, place: p.place, pending: !!p.pending, note: p.note || '', classes };
